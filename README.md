@@ -22,10 +22,10 @@ The Database used in the presentation is located in the database folder. The dat
 
 ### Full Access Account
 
-Username: Admin
+Username: Admin  
 Password: HzpwhbGWBkX/4ZCQ
 
 ### Data API Account
 
-Username: Node-RED Client
+Username: Node-RED Client  
 Password: ZvzGUVZ3zjJx=QG
