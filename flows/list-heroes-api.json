@@ -1,0 +1,137 @@
+[
+    {
+        "id": "421ad137.6b2c78",
+        "type": "subflow",
+        "name": "Log Error",
+        "info": "This Subflow will log errors to a FileMaker database.",
+        "category": "Error Handling",
+        "in": [
+            {
+                "x": 60,
+                "y": 40,
+                "wires": [
+                    {
+                        "id": "3ab4c5f.29df4ba"
+                    },
+                    {
+                        "id": "77b1ea58.ef15cc"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 880,
+                "y": 40,
+                "wires": [
+                    {
+                        "id": "ab50c451.d0a9c",
+                        "port": 0
+                    },
+                    {
+                        "id": "421ad137.6b2c78",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": []
+    },
+    {
+        "id": "ca6c82d8.1fb968",
+        "type": "catch",
+        "z": "421ad137.6b2c78",
+        "name": "Catch Error Logging Issue",
+        "scope": ["5d3ad651.0e6f9", "3ab4c5f.29df4ba", "ab50c451.d0a9c"],
+        "uncaught": false,
+        "x": 270,
+        "y": 140,
+        "wires": [["77b1ea58.ef15cc"]]
+    },
+    {
+        "id": "ab50c451.d0a9c",
+        "type": "dapi-create-record",
+        "z": "421ad137.6b2c78",
+        "name": "Create Error Log Entry",
+        "client": "419e4bb0.483ef4",
+        "layout": "Log API",
+        "layoutType": "str",
+        "data": "error",
+        "dataType": "msg",
+        "scripts": "",
+        "scriptsType": "none",
+        "merge": "false",
+        "mergeType": "bool",
+        "output": "payload",
+        "x": 720,
+        "y": 40,
+        "wires": [[]]
+    },
+    {
+        "id": "3ab4c5f.29df4ba",
+        "type": "function",
+        "z": "421ad137.6b2c78",
+        "name": "Create Error Log",
+        "func": "msg.error = {\n    error: msg.error,\n    payload: msg.payload\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 500,
+        "y": 40,
+        "wires": [["a5f44368.242548"]]
+    },
+    {
+        "id": "77b1ea58.ef15cc",
+        "type": "change",
+        "z": "421ad137.6b2c78",
+        "name": "Set Log Error Message",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "error.message",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 530,
+        "y": 100,
+        "wires": [["a5f44368.242548"]]
+    },
+    {
+        "id": "a5f44368.242548",
+        "type": "debug",
+        "z": "421ad137.6b2c78",
+        "name": "Log Error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 740,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "419e4bb0.483ef4",
+        "type": "dapi-client",
+        "z": "",
+        "name": "DevCon Presentation",
+        "timeout": "0",
+        "concurrency": "11"
+    },
+    {
+        "id": "a87c2e5c.9e0478",
+        "type": "subflow:421ad137.6b2c78",
+        "z": "e85ef369.c9706",
+        "name": "",
+        "x": 800,
+        "y": 320,
+        "wires": [["62a027d0.dde248"]]
+    }
+]

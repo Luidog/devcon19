@@ -1,0 +1,67 @@
+[
+    {
+        "id": "f65248df.df996",
+        "type": "tab",
+        "label": "Initial Demo",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "718de091.755b7",
+        "type": "inject",
+        "z": "f65248df.df996",
+        "name": "Start Flow",
+        "topic": "",
+        "payload": "{}",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 180,
+        "y": 320,
+        "wires": [["344b918b.1c4656"]]
+    },
+    {
+        "id": "9886bdb4.b5963",
+        "type": "debug",
+        "z": "f65248df.df996",
+        "name": "Log Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 650,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "344b918b.1c4656",
+        "type": "dapi-create-record",
+        "z": "f65248df.df996",
+        "name": "",
+        "client": "419e4bb0.483ef4",
+        "layout": "People Demo API",
+        "layoutType": "str",
+        "data": "{\"name\":\"Susan Kare\",\"biography\":\"Kare was born in Ithaca, New York, and is the sister of aerospace engineer Jordin Kare. In high school she worked at a museum for a designer, Harry Loucks, who introduced her to typography and graphic design. She graduated from Harriton High School in 1971, graduated summa cum laude with a B.A. in Art from Mount Holyoke College in 1975, and received a Ph.D. from New York University in 1978. She next moved to San Francisco and worked for the Fine Arts Museums.\"}",
+        "dataType": "json",
+        "scripts": "",
+        "scriptsType": "none",
+        "merge": "true",
+        "mergeType": "bool",
+        "output": "payload",
+        "x": 420,
+        "y": 320,
+        "wires": [["9886bdb4.b5963"]]
+    },
+    {
+        "id": "419e4bb0.483ef4",
+        "type": "dapi-client",
+        "z": "",
+        "name": "DevCon Presentation",
+        "timeout": "0",
+        "concurrency": "11"
+    }
+]

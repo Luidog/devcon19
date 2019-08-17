@@ -1,0 +1,460 @@
+[
+    {
+        "id": "421ad137.6b2c78",
+        "type": "subflow",
+        "name": "Log Error",
+        "info": "This Subflow will log errors to a FileMaker database.",
+        "category": "Error Handling",
+        "in": [
+            {
+                "x": 60,
+                "y": 40,
+                "wires": [
+                    {
+                        "id": "3ab4c5f.29df4ba"
+                    },
+                    {
+                        "id": "77b1ea58.ef15cc"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 880,
+                "y": 40,
+                "wires": [
+                    {
+                        "id": "ab50c451.d0a9c",
+                        "port": 0
+                    },
+                    {
+                        "id": "421ad137.6b2c78",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": []
+    },
+    {
+        "id": "ca6c82d8.1fb968",
+        "type": "catch",
+        "z": "421ad137.6b2c78",
+        "name": "Catch Error Logging Issue",
+        "scope": ["5d3ad651.0e6f9", "3ab4c5f.29df4ba", "ab50c451.d0a9c"],
+        "uncaught": false,
+        "x": 270,
+        "y": 140,
+        "wires": [["77b1ea58.ef15cc"]]
+    },
+    {
+        "id": "ab50c451.d0a9c",
+        "type": "dapi-create-record",
+        "z": "421ad137.6b2c78",
+        "name": "Create Error Log Entry",
+        "client": "419e4bb0.483ef4",
+        "layout": "Log API",
+        "layoutType": "str",
+        "data": "error",
+        "dataType": "msg",
+        "scripts": "",
+        "scriptsType": "none",
+        "merge": "false",
+        "mergeType": "bool",
+        "output": "payload",
+        "x": 720,
+        "y": 40,
+        "wires": [[]]
+    },
+    {
+        "id": "3ab4c5f.29df4ba",
+        "type": "function",
+        "z": "421ad137.6b2c78",
+        "name": "Create Error Log",
+        "func": "msg.error = {\n    error: msg.error,\n    payload: msg.payload\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 500,
+        "y": 40,
+        "wires": [["a5f44368.242548"]]
+    },
+    {
+        "id": "77b1ea58.ef15cc",
+        "type": "change",
+        "z": "421ad137.6b2c78",
+        "name": "Set Log Error Message",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "error.message",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 530,
+        "y": 100,
+        "wires": [["a5f44368.242548"]]
+    },
+    {
+        "id": "a5f44368.242548",
+        "type": "debug",
+        "z": "421ad137.6b2c78",
+        "name": "Log Error",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 740,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "c90217d5.605628",
+        "type": "tab",
+        "label": "List IOT Devices",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "d6678456.d90998",
+        "type": "particle-util",
+        "z": "c90217d5.605628",
+        "pcloud": "",
+        "utilitytype": "listDevices",
+        "devid": "__DEVID__",
+        "productIdOrSlug": "",
+        "x": 660,
+        "y": 100,
+        "wires": [["64a7f725.75f728"]]
+    },
+    {
+        "id": "64a7f725.75f728",
+        "type": "split",
+        "z": "c90217d5.605628",
+        "name": "Split By Device",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 860,
+        "y": 100,
+        "wires": [["6c2812f8.2b0bf4"]]
+    },
+    {
+        "id": "41f7f045.d53ac",
+        "type": "dapi-create-record",
+        "z": "c90217d5.605628",
+        "name": "Create Device Record",
+        "client": "419e4bb0.483ef4",
+        "layout": "layout",
+        "layoutType": "msg",
+        "data": "payload",
+        "dataType": "msg",
+        "scripts": "",
+        "scriptsType": "none",
+        "merge": "false",
+        "mergeType": "bool",
+        "output": "payload.created",
+        "x": 1780,
+        "y": 140,
+        "wires": [["d9b33cb5.09058"]]
+    },
+    {
+        "id": "6c2812f8.2b0bf4",
+        "type": "change",
+        "z": "c90217d5.605628",
+        "name": "Set Device Query",
+        "rules": [
+            {
+                "t": "set",
+                "p": "layout",
+                "pt": "msg",
+                "to": "Device API",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.coreid",
+                "pt": "msg",
+                "to": "payload.id",
+                "tot": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "payload.id",
+                "pt": "msg"
+            },
+            {
+                "t": "set",
+                "p": "query",
+                "pt": "msg",
+                "to": "{}",
+                "tot": "json"
+            },
+            {
+                "t": "set",
+                "p": "query.coreid",
+                "pt": "msg",
+                "to": "payload.coreid",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1070,
+        "y": 100,
+        "wires": [["5ae48175.a8f598"]]
+    },
+    {
+        "id": "441fff28.2a6ea",
+        "type": "catch",
+        "z": "c90217d5.605628",
+        "name": "Catch Errors",
+        "scope": null,
+        "uncaught": false,
+        "x": 170,
+        "y": 200,
+        "wires": [["26163f48.51ca48"]]
+    },
+    {
+        "id": "5ae48175.a8f598",
+        "type": "dapi-perform-find",
+        "z": "c90217d5.605628",
+        "name": "Find Device Records",
+        "client": "419e4bb0.483ef4",
+        "layout": "layout",
+        "layoutType": "msg",
+        "limit": "1",
+        "limitType": "num",
+        "offset": "",
+        "offsetType": "num",
+        "sort": "",
+        "sortType": "none",
+        "query": "query",
+        "queryType": "msg",
+        "scripts": "",
+        "scriptsType": "none",
+        "portals": "",
+        "portalsType": "none",
+        "output": "records",
+        "x": 1300,
+        "y": 100,
+        "wires": [["924b66cf.e03d68"]]
+    },
+    {
+        "id": "924b66cf.e03d68",
+        "type": "switch",
+        "z": "c90217d5.605628",
+        "name": "Check If Record Exists",
+        "property": "records.data",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "empty"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1540,
+        "y": 100,
+        "wires": [["d5b2412f.c132e8"], ["41f7f045.d53ac"]]
+    },
+    {
+        "id": "d5b2412f.c132e8",
+        "type": "dapi-edit-record",
+        "z": "c90217d5.605628",
+        "name": "Edit Device Record",
+        "client": "419e4bb0.483ef4",
+        "layout": "layout",
+        "layoutType": "msg",
+        "recordId": "records.data[0].recordId",
+        "recordIdType": "msg",
+        "data": "payload",
+        "dataType": "msg",
+        "scripts": "",
+        "scriptsType": "none",
+        "merge": "false",
+        "mergeType": "bool",
+        "output": "payload",
+        "x": 1770,
+        "y": 60,
+        "wires": [["d9b33cb5.09058"]]
+    },
+    {
+        "id": "2b428f6b.9daae8",
+        "type": "http in",
+        "z": "c90217d5.605628",
+        "name": "Receive Device Request",
+        "url": "/devices",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 210,
+        "y": 100,
+        "wires": [["cfda394f.b7426"]]
+    },
+    {
+        "id": "fc0e0d9b.1d04",
+        "type": "http response",
+        "z": "c90217d5.605628",
+        "name": "Send Response",
+        "statusCode": "200",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 2620,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "d9b33cb5.09058",
+        "type": "join",
+        "z": "c90217d5.605628",
+        "name": "Join Devices",
+        "mode": "auto",
+        "build": "string",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1970,
+        "y": 100,
+        "wires": [["fe360af1.0a1a7"]]
+    },
+    {
+        "id": "fe360af1.0a1a7",
+        "type": "switch",
+        "z": "c90217d5.605628",
+        "name": "Check For Request",
+        "property": "res",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "nempty"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 2170,
+        "y": 100,
+        "wires": [["576c40e0.30b018"]]
+    },
+    {
+        "id": "cfda394f.b7426",
+        "type": "change",
+        "z": "c90217d5.605628",
+        "name": "Preserve Request",
+        "rules": [
+            {
+                "t": "set",
+                "p": "res",
+                "pt": "flow",
+                "to": "res",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "req",
+                "pt": "flow",
+                "to": "req",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 450,
+        "y": 100,
+        "wires": [["d6678456.d90998"]]
+    },
+    {
+        "id": "576c40e0.30b018",
+        "type": "change",
+        "z": "c90217d5.605628",
+        "name": "Populate Request",
+        "rules": [
+            {
+                "t": "set",
+                "p": "req",
+                "pt": "msg",
+                "to": "req",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "res",
+                "pt": "msg",
+                "to": "res",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2410,
+        "y": 100,
+        "wires": [["fc0e0d9b.1d04"]]
+    },
+    {
+        "id": "6fba88f1.40765",
+        "type": "http response",
+        "z": "c90217d5.605628",
+        "name": "Send Error Response",
+        "statusCode": "500",
+        "headers": {
+            "content-type": "application/json"
+        },
+        "x": 2600,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "26163f48.51ca48",
+        "type": "subflow:421ad137.6b2c78",
+        "z": "c90217d5.605628",
+        "name": "",
+        "x": 1160,
+        "y": 200,
+        "wires": [["6fba88f1.40765"]]
+    },
+    {
+        "id": "419e4bb0.483ef4",
+        "type": "dapi-client",
+        "z": "",
+        "name": "DevCon Presentation",
+        "timeout": "0",
+        "concurrency": "11"
+    }
+]
